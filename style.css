@@ -1,0 +1,247 @@
+:root {
+  --bg: #000;
+  --fg: #fff;
+  --fg-soft: #d4d4d4;
+  --muted: #8c8c8c;
+  --tick: #5a5a5a;
+  --tick-major: #9a9a9a;
+  font-family: 'Outfit', system-ui, sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+/* Hidden while the mouse is still, so the clock works as a wallpaper. */
+body.idle {
+  cursor: none;
+}
+
+.clock {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Origin of every ring: the dial center, at the left screen edge so the edge
+   cuts the rings off where they fade. clock.js sets the scale. */
+.dial {
+  position: absolute;
+  left: 1.5vw;
+  top: 50%;
+  width: 0;
+  height: 0;
+}
+
+/* A 1000px box centered on the dial so the fade mask can pivot around it. */
+.rings {
+  position: absolute;
+  left: -500px;
+  top: -500px;
+  width: 1000px;
+  height: 1000px;
+  /* Fade the rings out as they curve away from the 3 o'clock reading line. */
+  -webkit-mask-image: var(--fade);
+  mask-image: var(--fade);
+  --fade: conic-gradient(
+    from 0deg at 50% 50%,
+    rgb(0 0 0 / 0.25) 0deg,
+    #000 60deg,
+    #000 120deg,
+    rgb(0 0 0 / 0.25) 180deg,
+    transparent 205deg,
+    transparent 335deg,
+    rgb(0 0 0 / 0.25) 360deg
+  );
+}
+
+/* --- Rings ---------------------------------------------------------------- */
+
+.ring {
+  --turn: 0deg;
+  position: absolute;
+  left: 500px;
+  top: 500px;
+  width: 0;
+  height: 0;
+  transform: rotate(var(--turn));
+  will-change: transform;
+}
+
+/* The minute ring rolls to each new value; the seconds ring moves every frame. */
+.ring.minutes,
+.ring.minutes .label {
+  transition: transform 900ms cubic-bezier(0.65, 0, 0.25, 1), opacity 400ms ease;
+}
+
+.ring.seconds {
+  animation: fade-in 1200ms ease 300ms both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.ticks {
+  position: absolute;
+  translate: -50% -50%;
+  overflow: visible;
+}
+
+.ticks line {
+  stroke: var(--tick);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.ticks line.major {
+  stroke: var(--tick-major);
+}
+
+.label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+
+.label > span {
+  position: absolute;
+  translate: -50% -50%;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  transition: color 400ms ease, scale 400ms ease;
+}
+
+.label.active > span {
+  color: var(--fg);
+  scale: 1.75;
+}
+
+.hour {
+  position: absolute;
+  left: 3px;
+  top: 0;
+  translate: 0 -50%;
+  font-size: 108px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Panel ---------------------------------------------------------------- */
+
+.panel {
+  position: absolute;
+  left: 58%;
+  top: 50%;
+  translate: 0 -50%;
+  width: min(32vw, 520px);
+  font-size: clamp(12px, 0.95vw, 18px);
+  color: var(--fg-soft);
+}
+
+.weekday {
+  font-size: 5.2em;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.full-date {
+  margin-top: 0.8em;
+  font-size: 1.6em;
+  font-weight: 300;
+  color: var(--muted);
+}
+
+.calendar {
+  margin-top: 3.5em;
+}
+
+.calendar-title,
+.progress-row > span:first-child {
+  letter-spacing: 0.26em;
+  color: var(--muted);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 0.9em;
+  margin-top: 1.4em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.calendar-head {
+  color: var(--muted);
+}
+
+.calendar-grid .today {
+  color: var(--bg);
+  background: var(--fg);
+  border-radius: 999px;
+  margin: -0.35em 0.6em;
+  padding: 0.35em 0;
+}
+
+.progress {
+  display: grid;
+  gap: 1.1em;
+  margin-top: 3.5em;
+}
+
+.progress-row {
+  display: grid;
+  grid-template-columns: 5em 1fr 4.5em;
+  align-items: center;
+  gap: 1em;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-row > span:last-child {
+  text-align: right;
+}
+
+.bar {
+  height: 2px;
+  background: var(--tick);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  width: 0;
+  background: var(--fg);
+  transition: width 900ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring.minutes,
+  .ring.minutes .label,
+  .label > span,
+  .bar-fill {
+    transition: none;
+  }
+
+  .ring.seconds {
+    animation: none;
+  }
+}

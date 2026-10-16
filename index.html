@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Concentric Panel</title>
+    <meta name="description" content="A concentric ring clock with a calendar panel, in plain JavaScript." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&display=swap" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="clock">
+      <div class="dial">
+        <div class="rings"></div>
+        <div class="hour"></div>
+      </div>
+
+      <aside class="panel">
+        <div class="weekday"></div>
+        <div class="full-date"></div>
+
+        <section class="calendar">
+          <div class="calendar-title"></div>
+          <div class="calendar-grid"></div>
+        </section>
+
+        <section class="progress">
+          <div class="progress-row">
+            <span>DAY</span>
+            <div class="bar"><div class="bar-fill" data-progress="day"></div></div>
+            <span data-label="day"></span>
+          </div>
+          <div class="progress-row">
+            <span>YEAR</span>
+            <div class="bar"><div class="bar-fill" data-progress="year"></div></div>
+            <span data-label="year"></span>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <script src="clock.js"></script>
+  </body>
+</html>
