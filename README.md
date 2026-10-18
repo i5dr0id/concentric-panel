@@ -3,7 +3,9 @@
 A concentric ring clock with a calendar panel, on a black background. Plain
 HTML, CSS and JavaScript: no libraries, no build step.
 
-Live: https://i5dr0id.github.io/concentric-panel/
+**Live:** https://i5dr0id.github.io/concentric-panel/
+
+![Concentric Panel](screenshots/panel.jpg)
 
 - The seconds ring sweeps continuously (updated every frame).
 - The minute ring rolls to each new minute; the current minute is enlarged and
